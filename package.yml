@@ -1,0 +1,49 @@
+name       : dnf
+version    : 2.7.5
+release    : 1
+source     :
+    - https://github.com/rpm-software-management/dnf/archive/2.7.5/dnf-2.7.5.tar.gz : 72f15d2804f6e52bee3ebe14c4923c75f63fc939ca0aa8265a139b8ac9ad0d1e
+license    :
+    - GPL-2.0+
+    - GPL-2.0
+component  : programming.devel
+summary    : Package manager forked from Yum, using libsolv as a dependency resolver
+description: |
+    Dandified Yum (DNF) is the next upcoming major version of Yum.
+    It does package management using RPM, libsolv and libdnf libraries.
+
+    It utilizes librepo for metadata handling and package downloads.
+    It uses libcomps to process composition group metadata.
+
+    DNF is provided in Solus to enable setting up containers/chroots of
+    RPM-based Linux distributions.
+
+    To manage packages on Solus, use 'eopkg'.
+builddeps  :
+    - python-sphinx
+    - python-iniparse
+    - libcomps-devel
+    - pkgconfig(libdnf)
+    - pkgconfig(librepo)
+    - pkgconfig(rpm)
+rundeps    :
+    - python-iniparse
+    - libdnf
+    - librepo
+    - libcomps
+    - rpm
+setup      : |
+    mkdir build; cd build
+    %cmake .. -DPYTHON_DESIRED:str=3
+build      : |
+    %make -C build
+    %make doc-man -C build
+install    : |
+    %make_install -C build
+    # To ensure the repo configuration location exists
+    mkdir -p $installdir/etc/yum.repos.d
+    # To avoid conflicts with yum...
+    rm $installdir/usr/share/man/man8/yum.8
+    # Rename dnf-3 and dnf-automatic-3 to dnf and dnf-automatic
+    mv $installdir/usr/bin/dnf-3 $installdir/usr/bin/dnf
+    mv $installdir/usr/bin/dnf-automatic-3 $installdir/usr/bin/dnf-automatic
