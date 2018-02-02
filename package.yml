@@ -1,6 +1,6 @@
 name       : dnf
 version    : 2.7.5
-release    : 1
+release    : 2
 source     :
     - https://github.com/rpm-software-management/dnf/archive/2.7.5/dnf-2.7.5.tar.gz : 72f15d2804f6e52bee3ebe14c4923c75f63fc939ca0aa8265a139b8ac9ad0d1e
 license    :
